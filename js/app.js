@@ -31,7 +31,7 @@
     	/* The View */
     	AdView = Backbone.View.extend({
     	    tagName : "li",
-    	    template : _.template($('#ad-template').html()),
+    	    template : $('#ad-template').html(),
     	    events : {
     	        "click .reply" : "reply"
     	    },
