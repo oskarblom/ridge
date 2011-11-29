@@ -6,23 +6,175 @@
 	<script src="js/libs/json2.js" type="text/javascript"></script>
 	<script src="js/libs/jquery.1.7.js" type="text/javascript"></script>
 	<script src="js/libs/underscore.js" type="text/javascript"></script>
-	<script src="js/libs/mustache.js" type="text/javascript"></script>
 	<script src="js/libs/backbone.js" type="text/javascript"></script>
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
-	
-	<!-- Mustache Templates -->
-	<script id="ad-template" type="text/html">
-	    <h3>{{name}}</h3>
-	    <p>{{text}}</p>
-	    <a href="{{url}}" class="reply">{{reply_text}}</a>
-	</script>
+
+    <script type="text/template" id="ad_template">
+    	<form class="jform" id="add_ad_form" action="/market/rent" enctype="multipart/form-data" method="POST">
+
+
+        		<h3>Annonsera Gratis på Uppsala Bostad</h3>
+
+        				<dl>
+        			<dt class="adtype">
+        				Jag vill
+        			</dt>
+        			<dd class="adtype"> 
+
+        				<select id="ad_rent_type" name="rent_type" title="Annonstyp - Vill du hyra, köpa, sälja eller hyra ut en bostad i Uppsala?">
+        					<option value="-1">-</option>
+        					<option value="rent">hyra</option>
+        					<option value="buy">köpa</option>
+        					<option value="sell">sälja</option>
+        					<option value="rent_out">hyra ut</option>
+        				</select>
+
+        				<select id="ad_rent_room_type" name="rent_room_type" title="Bostadstyp - Vilken bostadstyp gäller annonsen">
+        					<option value="-1">-</option>
+        					<option value="flat">en lägenhet</option>
+        					<option value="house">ett hus</option>
+        					<option value="room">ett rum</option>
+        					<option value="plot">en tomt</option>
+        					<option value="holiday_house">ett fritidshus</option>
+        				</select>
+        			</dd>
+
+        			<dt class="adarea">
+        				<label for="ad_area">Område</label>
+        			</dt>
+        			<dd class="adarea">
+        				<select id="ad_area" name="ad_area[]" title="Vilket område finns bostaden du vill sälja/hyra ut i?">
+        					<option value="-1">Välj område</option>
+        										<option value="36">Centrum</option>
+        										<option value="10">Eriksberg</option>
+        										<option value="22">Flogsta</option>
+        										<option value="1">Fålhagen</option>
+        										<option value="3">Kapellgärdet</option>
+        										<option value="2">Luthagen</option>
+        										<option value="16">Salabacke</option>
+        										<option value="4">Svartbäcken</option>
+        										<option value="24">Ultuna</option>
+        										<option value="11">Alsike</option>
+        										<option value="40">Alunda</option>
+        										<option value="26">Bergsbrunna</option>
+        										<option value="12">Berthåga</option>
+        										<option value="33">Björklinge</option>
+        										<option value="51">Danmark</option>
+        										<option value="27">Enköping</option>
+        										<option value="25">Gamla Uppsala</option>
+        										<option value="41">Gimo</option>
+        										<option value="20">Gottsunda</option>
+        										<option value="52">Gränby</option>
+        										<option value="28">Heby</option>
+        										<option value="14">Herrhagen</option>
+        										<option value="29">Håbo</option>
+        										<option value="46">Håga</option>
+        										<option value="15">Höganäs</option>
+        										<option value="5">Industristaden</option>
+        										<option value="18">Knivsta</option>
+        										<option value="48">Kungsängen</option>
+        										<option value="47">Kvarnbo</option>
+        										<option value="49">Kvarngärdet</option>
+        										<option value="13">Kåbo</option>
+        										<option value="6">Norby</option>
+        										<option value="50">Nyby</option>
+        										<option value="9">Nåntuna</option>
+        										<option value="45">Rasbo</option>
+        										<option value="21">Rickomberga</option>
+        										<option value="44">Skölsta</option>
+        										<option value="39">Storvreta</option>
+        										<option value="7">Sunnersta</option>
+        										<option value="37">Sävja</option>
+        										<option value="30">Tierp</option>
+        										<option value="35">Tunabackar</option>
+        										<option value="23">Ulleråker</option>
+        										<option value="8">Valsätra</option>
+        										<option value="38">Vilan</option>
+        										<option value="34">Vreta</option>
+        										<option value="17">Årsta</option>
+        										<option value="31">Älvkarleby</option>
+        										<option value="42">Öregrund</option>
+        										<option value="19">Örsundsbro</option>
+        										<option value="43">Österbybruk</option>
+        										<option value="32">Östhammar</option>
+        									</select>
+        				<div id="ad_area_label"></div>
+        			</dd>
+
+        			<dt class="adaddress">
+        				<label for="ad_address">Gatuadress</label>
+        			</dt>
+        			<dd class="adaddress">
+        				<input type="text" placeholder="Adress" class="text" id="ad_address" title="Adress till bostaden du vill hyra ut eller sälja" name="address" size="50" />
+        			</dd>
+
+        			<dt class="adzip">
+        				<label for="ad_zip">Postnummer</label>
+        			</dt>
+        			<dd class="adzip">
+        				<input type="text" placeholder="Postnummer" class="text" id="ad_zip" title="Postnumret gör att du kan visa på kartan vart bostaden finns" name="zip" size="8" />
+        			</dd>
+
+        			<dt class="name">
+        				<label for="ad_name">Namn</label>
+        			</dt>
+        			<dd class="name">
+        				<input type="text" placeholder="Namn" class="text" id="ad_name" title="Namn - För- och efternamn. Visas inte i annonsen." name="name" size="50" />
+        			</dd>
+
+        			<dt class="email">
+        				<label for="ad_email">E-post</label>
+        			</dt>
+        			<dd class="email">
+        				<input type="email" placeholder="Din E-postadress" id="ad_email" title="Din E-postadress - Vi skickar ett mail med verifikationslänk. Visas inte i annonsen." class="text" name="email" size="50" />
+        			</dd>
+
+        			<dt class="subject">
+        				<label for="ad_subject">Rubrik</label>
+        			</dt>
+        			<dd class="subject">
+        				<input type="text" placeholder="Rubrik på annonsen" title="Rubrik - En bra rubrik ex 'Juridikstudent önskar hyra del i lägenhet i 6 månader'" class="text" name="subject" id="ad_subject" value="" size="50" />
+        			</dd>
+
+        			<dt class="description">
+        				<label for="ad_description">Annonstext</label>
+        			</dt>
+        			<dd class="description">
+        				<textarea name="description" placeholder="Annonstext" title="Annonstext - Undvik att fylla i kontaktuppgifter i beskrivningen, utan låt eventuella intressenter kontakta dig via vårt formulär" class="text" id="ad_description"></textarea>
+        			</dd>
+
+        			<dt class="picture">
+        				<label for="ad_image">Bild</label>
+        			</dt>
+        			<dd class="picture">
+        				<input type="file" class="file" name="ad_image" value="Välj bild" id="ad_image">
+        			</dd>
+
+        			<dt class="subscribe">
+
+        			</dt>
+        			<dd class="subscribe">
+        				<label><input type="checkbox" name="newsletter" value="1" id="ad_newsletter">Prenumerera på vårt nyhetsbrev om bostäder i Uppsala</label>
+        			</dd>
+
+        			<dt class="submit">
+
+        			</dt>
+        			<dd class="submit">
+        				<input class="button green bigrounded" title="När du har lagt till annonsen skickar vi ett mail till dig med en länk för att verifiera din annons och e-postaddress" type="submit" value="Lägg in annons" />
+        			</dd>
+        		</dl>
+
+
+        	</form>
+    </script>
 </head>
 
 <body>
 	<div data-role="page">
 		<header data-role="header"></header>
 		<div data-role="content">
-
+            <div id="ad_container"></div>
 		</div>
 		<footer data-role="footer"></footer>
 	</div>
