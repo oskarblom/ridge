@@ -38,7 +38,9 @@
     	        this.render();
     	    },
     	    render : function(){
-    	        var template = _.template($('#ad_template').html(), {});
+    	        var template = _.template($('#show_ad').html(), {
+    	            id : this.id
+    	        });
     	        this.el.html(template);
     	    },
     	    events: {
@@ -54,29 +56,45 @@
     	    }
     	});
     	
-    	var ad_view = new AdView({el : $('#ad_container')})
+    	HomeView = Backbone.View.extend({
+    	    initialize : function(){
+    	        this.render();
+    	    },
+    	    render : function(){
+    	        var template = _.template($('#home').html(), {});
+    	        this.el.html(template);
+    	    }
+    	});
     	
-    	var AppController = Backbone.Controller.extend({
+    //	var ad_view = new AdView({el : $('#ad_container')})
+    	
+    	var AppController = Backbone.Router.extend({
     	    routes : {
     	        '' : 'index',
     	        '/ad' : 'list_ads',
     	        '/ad/:id' : 'show_ad'
     	    },
     	    index : function(){
-    	        alert("show home page");
+    	        var view = new HomeView({
+    	            el : $('#container')
+    	        });
     	    },
     	    list_ads : function(){
     	        alert("show ads page");
     	    },
     	    show_ad : function(ad_id){
-    	        alert("show ad with id:" + ad_id);
+                var view = new AdView({
+                    el : $('#container'),
+                    id : ad_id
+                });
     	    }
     	    
     	})
     	
-    	// var ApplicationController = new AppController;   
-    	// 
-        Backbone.history.start({pushState: true});
+    	var ApplicationController = new AppController;   
+
+        //Backbone.history.start({pushState: true});
+        Backbone.history.start();
     	
     })
 })(jQuery);
