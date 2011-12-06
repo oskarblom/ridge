@@ -8,12 +8,27 @@ include 'vendor/Mustache/Mustache.php';
 $app = new Slim();
 $supported = array('ad', 'job', 'company', 'event', 'venue');
 
+/* Middleware Function for API-auth */
 function authenticate(){
     return true;
 }
 
 function render($view, $data = array(), $layout = 'layout') {
-    
+    $content = "";
+    try {
+        $view_template = file_get_contents(TEMPLATE_PATH . $view . '.html');
+        
+        $layout_template = file_get_contents(TEMPLATE_PATH . $layout . '.html');
+
+        $full_template = str_replace('{{{content}}}', $view_template, $layout_template); 
+
+        $mustache = new Mustache;
+
+        $content = $mustache->render($full_template, $data);
+    } catch (Exception $e) {
+        
+    }
+    return $content; 
 }
 
 $app->get('/', function(){

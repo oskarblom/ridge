@@ -26,7 +26,7 @@
         
         window.TodoView = Backbone.View.extend({
             tagName :  "li",
-            template : _.template($('#ad-template').html()),
+            //template : _.template($('#ad-template').html()),
             initialize : function(){
               this.model.bind('change', this.render, this);  
             },
@@ -42,7 +42,7 @@
                 'click #add-ad-btn' : 'addAd'
             },
             initialize : function(){
-              this.input    = this.$("#ad-description");  
+              this.input = this.$("#ad-description");  
             },
             addAd : function(){
                 var txt = this.input.val();
@@ -54,7 +54,6 @@
         });
         
         window.App = new AppView;
-        
         //Backbone.history.start();
     	
     })
