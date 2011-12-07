@@ -14,11 +14,6 @@
 		window.location.hash = '/' + uri;
 	}
 	
-	templates = {
-			'list' : '<h2>{{model}}</h2><ul class="items"></ul>',
-			'ad' : '<li><a href="/ad/{{id}}">{{name}}</a></li>',
-			'category' : '<li><a href="{{uri}}">{{name}}</a></li>'
-		}
 	
 	render = function(view, data){
 		if(typeof templates[view] == 'undefined') {
