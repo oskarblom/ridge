@@ -24,7 +24,11 @@
 	
 	ItemModel = Backbone.Model.extend({});
 	
-	ItemCollection = Backbone.Collection.extend({});
+	ItemCollection = Backbone.Collection.extend({
+		parse: function(response)  {
+	  		return response.data;
+		}
+	});
 	
 	ItemView = Backbone.View.extend({
 		template : 'item',
