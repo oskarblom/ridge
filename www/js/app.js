@@ -11,7 +11,8 @@
 (function($){
 	
 	function navigate_to(uri){
-		window.location.hash = '/' + uri;
+		//window.location.hash = '/' + uri;
+		
 	}
 	
 	
@@ -110,8 +111,8 @@
 	window.AppView = Backbone.Router.extend({
 		routes : {
 			'' : 'models',
-			'/:model' : 'list',
-			'/:model/:id' : 'view'
+			':model' : 'list',
+			':model/:id' : 'view'
 		},
 		initialize : function(){
 			this.adslistview = new AdListView({
@@ -144,9 +145,20 @@
     $(function(){
         
         window.ridge = new AppView;
-		Backbone.history.start();
-        // window.App = new AppView;
-        //         Backbone.history.start();
+		Backbone.history.start({pushState : true});
+		
+		window.document.addEventListener('click', function(e) {
+		    e = e || window.event
+		    var target = e.target || e.srcElement
+		    if ( target.nodeName.toLowerCase() === 'a' ) {
+		        e.preventDefault()
+		        var uri = target.getAttribute('href')
+		        ridge.navigate(uri, true)
+		    }
+		});
+		window.addEventListener('popstate', function(e) {
+			ridge.navigate(location.pathname, true);
+		});
     	
     })
 })(jQuery);
