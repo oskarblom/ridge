@@ -9,52 +9,145 @@
 */
 
 (function($){
+	
+	function navigate_to(uri){
+		window.location.hash = '/' + uri;
+	}
+	
+	templates = {
+			'list' : '<h2>{{model}}</h2><ul class="items"></ul>',
+			'ad' : '<li><a href="/ad/{{id}}">{{name}}</a></li>',
+			'category' : '<li><a href="{{uri}}">{{name}}</a></li>'
+		}
+	
+	render = function(view, data){
+		if(typeof templates[view] == 'undefined') {
+			return "";
+		}
+		return Mustache.to_html(templates[view], data);
+	}
+	
+	ItemModel = Backbone.Model.extend({});
+	
+	ItemCollection = Backbone.Collection.extend({});
+	
+	ItemView = Backbone.View.extend({
+		template : 'item',
+		events : {
+			'click a' : 'go'
+		},
+		initialize : function(){
+			_.bindAll(this, 'render');
+			this.model.bind('change', this.render, this);
+		},
+		render : function(){
+			$(this.el).html(render(this.template, this.model.toJSON()));
+			return this;
+		},
+		go : function(){
+			event.preventDefault();
+			navigate_to(this.model.get('uri'));
+		}
+		
+	});
+	
+	ItemListView = Backbone.View.extend({
+		template : 'list',
+		model : 'Items',
+		view : ItemView,
+		initialize : function(){
+			_.bindAll(this, 'render');
+			this.collection.bind('reset', this.render);
+		},
+		render : function(){
+			var $items,
+			collection = this.collection;
+			
+			$(this.el).html(render(this.template, {
+				model : this.model
+			}));
+			
+			$items = this.$('.items');
+			
+			var view_class = this.view;
+			
+			this.collection.each(function(item){
+				var current_view = new view_class({
+					model : item,
+					collection : collection
+				});
+				$items.append(current_view.render().el);
+			});
+			return this;
+		}
+	});
+	
+	Category = ItemModel.extend({});
+	CategoryCollection = ItemCollection.extend({model: ItemModel, url : '/category'});
+	category_collection = new CategoryCollection;
+	
+	CategoryView = ItemView.extend({
+		template : 'category'
+	});
+	
+	CategoryListView = ItemListView.extend({
+		el : $('#content'),
+		model : 'Categorys',
+		view : CategoryView
+	});
+
+	Ad = ItemModel.extend({});
+	AdCollection = ItemCollection.extend({model: Ad, url : '/ad'});
+	ad_collection = new AdCollection;
+	
+	AdView = ItemView.extend({template : 'ad'});
+	
+	AdListView = ItemListView.extend({
+		el : $('#content'),
+		model : 'Ads',
+		view : AdView
+	});
+	
+	window.AppView = Backbone.Router.extend({
+		routes : {
+			'' : 'models',
+			'/:model' : 'list',
+			'/:model/:id' : 'view'
+		},
+		initialize : function(){
+			this.adslistview = new AdListView({
+				collection : ad_collection
+			});
+			
+			this.categorylistview = new CategoryListView({
+				collection : category_collection
+			});
+		},
+		list : function(model){
+			switch(model) {
+				case 'ad':
+					ad_collection.fetch();
+					break;
+			}
+		},
+		view : function(model, id){
+			alert(model + id)
+		},
+		models : function(){
+			category_collection.fetch();
+		}
+	})
+	
+
+	
+	
+	
     $(function(){
         
-        
-        
-        window.Ad = Backbone.Model.extend({
-            url : '/api/ads'
-        });
-        
-        window.AdCollection = Backbone.Collection.extend({
-            model: Ad
-        });
-        
-        window.Ads = new AdCollection;
-        
-        
-        window.TodoView = Backbone.View.extend({
-            tagName :  "li",
-            //template : _.template($('#ad-template').html()),
-            initialize : function(){
-              this.model.bind('change', this.render, this);  
-            },
-            render : function(){
-                $(this.el).html(this.template(this.model.toJSON()));
-                return this;
-            }
-        });
-        
-        window.AppView = Backbone.View.extend({
-            el : $('#content'),
-            events : {
-                'click #add-ad-btn' : 'addAd'
-            },
-            initialize : function(){
-              this.input = this.$("#ad-description");  
-            },
-            addAd : function(){
-                var txt = this.input.val();
-                    if(txt) {
-                        Ads.create({title : txt})
-                    }
-                    return false;
-            }
-        });
-        
-        window.App = new AppView;
-        //Backbone.history.start();
+        window.ridge = new AppView;
+		Backbone.history.start();
+        // window.App = new AppView;
+        //         Backbone.history.start();
     	
     })
 })(jQuery);

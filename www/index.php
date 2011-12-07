@@ -6,12 +6,17 @@ include 'vendor/Mustache/Mustache.php';
 
 
 $app = new Slim();
-$supported = array('ad', 'job', 'company', 'event', 'venue');
+
+function get_supported_models() {
+	return array('ad', 'job', 'company', 'event', 'venue');
+}
 
 /* Middleware Function for API-auth */
-function authenticate(){
+function authenticate($user, $key, $referrer = ''){
     return true;
 }
+
+
 
 function render($view, $data = array(), $layout = 'layout') {
     $content = "";
@@ -31,11 +36,26 @@ function render($view, $data = array(), $layout = 'layout') {
     return $content; 
 }
 
-$app->get('/', function(){
-    echo(render('index'));
+function get_templates(){
+	return "";
+}
+
+$app->get('/', function() use ($app) {
+	echo(render('index'));
 });
 
-$app->map('/api/:model(/:id)', 'authenticate', function($model, $id = 0) use ($app) {
+$app->get('/category', function() use ($app) {
+	$app->response()->header('Content-Type', 'application/json');
+	$result = array();
+	$models = get_supported_models();
+	foreach($models as $model){
+		$result[] = array('uri' => $model, 'name' => ucfirst($model));
+	}
+	echo json_encode($result);
+});
+
+$app->map('/:model(/:id)(/)', authenticate('api-key', 'api-pwd', 'referrer'), function($model, $id = 0) use ($app) {
+	$app->response()->header('Content-Type', 'application/json');
     if($id > 0) {
         if($app->request()->isGet()) { //get a single item of :model
             echo("get $id item of $model");
@@ -47,21 +67,30 @@ $app->map('/api/:model(/:id)', 'authenticate', function($model, $id = 0) use ($a
     } else {
         if($app->request()->isGet()) {
             //List all :model
-            echo("List all " . $model);
+            if($model === 'ad'){
+				$ads = array(
+					array(
+						'name' => 'Ad number 1',
+						'id' => 1
+					),
+					array(
+						'name' => 'Ad number 2',
+						'id' => 2
+					)
+				);
+				echo(json_encode($ads));
+			}
         } else if ($app->request()->isPost()) {
             //Create :model, expect data
             echo("Create " . $model);
         }
         
     }
-})->via('GET', 'POST', 'PUT', 'DELETE')->conditions(array('model' => '(' . implode($supported, '|') . ')'));
+})->via('GET', 'POST', 'PUT', 'DELETE')->conditions(array('model' => '(' . implode(get_supported_models(), '|') . ')'));
 
-
-$app->post('/ad', function(){
-    die("create ad");
+$app->get('/js/templates.js', function(){
+	echo('get templates');
 });
-
-
 
 $app->run();
 ?>
