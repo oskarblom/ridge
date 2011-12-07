@@ -1,5 +1,5 @@
 <?php
-include dirname(__FILE__) .  '/../app/config.php';
+include dirname(__FILE__) .  '/../php/app/config.php';
 
 include 'vendor/Slim/Slim.php';
 include 'vendor/Mustache/Mustache.php';
