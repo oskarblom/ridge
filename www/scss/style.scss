@@ -1,5 +1,6 @@
-@import "partials/settings";
 @import "partials/mixins";
-
-@import "externals/boilerplate";
-
+@import "externals/reset";
+@import "partials/settings";
+@import "partials/header";
+@import "partials/lists";
+@import "partials/forms";

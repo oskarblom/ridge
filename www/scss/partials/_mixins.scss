@@ -1,0 +1,105 @@
+@mixin clearfix {
+    *display:inline-block;
+    &:after {
+        content:" ";
+        display:block;
+        height:0;
+        clear:both;
+        visibility:hidden;
+    }
+}
+
+@mixin transition($property:all, $duration:1.0s, $function:ease) {
+    -webkit-transition:$property $duration $function;
+       -moz-transition:$property $duration $function;
+    	-ms-transition:$property $duration $function;
+    	 -o-transition:$property $duration $function;	
+    	    transition:$property $duration $function;
+}
+
+@mixin transform($scale:1, $rotate:0deg, $translate_x:0px, $translate_y:0px, $skew_x:0deg, $skew_y:0deg){
+    -webkit-transform: scale($scale) rotate($rotate) translate($translate_x, $translate_y) skew($skew_x, $skew_y);
+       -moz-transform: scale($scale) rotate($rotate) translate($translate_x, $translate_y) skew($skew_x, $skew_y);
+        -ms-transform: scale($scale) rotate($rotate) translate($translate_x, $translate_y) skew($skew_x, $skew_y);
+         -o-transform: scale($scale) rotate($rotate) translate($translate_x, $translate_y) skew($skew_x, $skew_y);
+            transform: scale($scale) rotate($rotate) translate($translate_x, $translate_y) skew($skew_x, $skew_y);
+}
+
+@mixin radial-gradient($inner, $outer) {
+    background: $inner; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, $inner 0%, $outer 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,$inner), color-stop(100%,$outer)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, $inner 0%,$outer 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, $inner 0%,$outer 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, $inner 0%,$outer 100%); /* IE10+ */
+    background: radial-gradient(center, ellipse cover, $inner 0%,$outer 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$inner}', endColorstr='#{$outer}',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
+}
+
+@mixin text-drop-shadow {
+    text-shadow: 1px 1px 3px  rgba(0,0,0,.5);
+    filter: dropshadow(color=#000000, offx=1, offy=1);
+}
+
+@mixin inset-shadow {
+    -moz-box-shadow: inset 0 0 8px rgba(0,0,0, 0.25);
+	-webkit-box-shadow: inset 0 0 8px rgba(0,0,0, 0.25);
+}
+
+@mixin linear-gradient($from, $to) {
+	background: $from; /* Old browsers */
+	background: -moz-linear-gradient(top, $from 0%, $to 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$from), color-stop(100%,$to)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, $from 0%,$to 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, $from 0%,$to 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, $from 0%,$to 100%); /* IE10+ */
+	background: linear-gradient(top, $from 0%,$to 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$from}', endColorstr='#{$to}',GradientType=0 ); /* IE6-8 */
+}
+
+@mixin quick-linear($base, $offset : 8%, $invert : false){
+	@if $invert == false {
+		@include linear-gradient(lighten($base, $offset), darken($base, $offset));
+	} @else if $invert == true {
+		@include linear-gradient(darken($base, $offset), lighten($base, $offset));
+	}
+    
+}
+
+@mixin button($borderradius: 5px, $borderwidth:1px, $bordercolor: #9c9c9c ) {
+	border:$borderwidth solid $bordercolor;
+	padding:.55em 1.05em;
+	@include rounded-corners($borderradius);
+}
+
+@mixin rounded-corners($radius: 5px) {
+	-webkit-border-radius:$radius;
+	   -moz-border-radius:$radius;
+	        border-radius:$radius;
+}
+
+@mixin bubble ($base, $color : #fff, $font-size:12px, $padding:0.1em 1em, $position:left){
+    @include quick-linear($base);
+    font-size:$font-size;
+    color:$color;
+    display:inline-block;
+    text-decoration:none;
+    padding:$padding;
+    &:after {
+        content: ' ';
+        height: 0;
+        position: absolute;
+        width: 0;
+        border: 5px solid transparent;
+        border-top-color: darken($base, 30%);
+        top: 100%;
+        @if $position == left {
+            border-right-color: darken($base, 30%);
+            left:0px;
+        } @else if $position == right {
+            border-left-color: darken($base, 30%);
+            right:0px;
+        }
+    }
+    
+}

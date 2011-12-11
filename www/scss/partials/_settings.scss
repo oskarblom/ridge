@@ -1,0 +1,20 @@
+$base_color : #0071bc;
+$bg_color: #e6e6e6;
+
+$border_color : #dbdbdb;
+$corner_radius : 5px;
+
+$default_font: Helvetica, Arial, Sans-serif;
+
+
+body {
+	font-family: $default_font;
+	font-size:14px;
+	line-height:20px;
+	margin:0;
+	padding:0;
+	@include linear-gradient(#fff, #e6e6e6);
+	height:100%;
+	background-repeat:no-repeat;
+}
+

@@ -1,0 +1,11 @@
+header {
+	position:relative;
+	@include quick-linear($base_color, 3%);
+	h1, h2, h3 {
+		margin:0;
+		font-size:16px;
+		text-align:center;
+		color:#fff;
+	}
+	padding:10px;
+}

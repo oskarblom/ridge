@@ -1,0 +1,6 @@
+.btn {
+	@include button($bordercolor: #10546d);
+	@include quick-linear(#197597);
+	color:#fff;
+	text-decoration:none;
+}

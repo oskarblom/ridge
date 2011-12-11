@@ -11,10 +11,8 @@
 (function($){
 	
 	function navigate_to(uri){
-		//window.location.hash = '/' + uri;
 		
 	}
-	
 	
 	render = function(view, data){
 		if(typeof templates[view] == 'undefined') {
@@ -33,6 +31,7 @@
 	
 	ItemView = Backbone.View.extend({
 		template : 'item',
+		tagName: "li",
 		events : {
 			'click a' : 'go'
 		},
@@ -112,7 +111,8 @@
 		routes : {
 			'' : 'models',
 			':model' : 'list',
-			':model/:id' : 'view'
+			':model/:id' : 'view',
+			':model/add' : 'add'
 		},
 		initialize : function(){
 			this.adslistview = new AdListView({
@@ -131,10 +131,13 @@
 			}
 		},
 		view : function(model, id){
-			alert(model + id)
+		
 		},
 		models : function(){
 			category_collection.fetch();
+		},
+		add : function(model){
+			alert("show form for " + model);
 		}
 	})
 	
